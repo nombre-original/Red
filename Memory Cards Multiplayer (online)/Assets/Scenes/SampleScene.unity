@@ -559,10 +559,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 719710986}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.6, y: 180.6}
-  m_SizeDelta: {x: 155.4, y: 50}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -32.700012}
+  m_SizeDelta: {x: 446.6, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &491966845
 MonoBehaviour:
@@ -618,7 +618,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -928,6 +928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d03b26532dcc449c87a3d6ed1660519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cartas
+  PRUEBA: {fileID: 6713156151082940588, guid: d39d35d8b8b33421a93a660d937fb480, type: 3}
   cartas:
   - {fileID: 6713156151082940588, guid: d39d35d8b8b33421a93a660d937fb480, type: 3}
   - {fileID: 5551754849718018598, guid: 7dc6c9bc9eb7a4dab87609bed9e3a482, type: 3}
@@ -1114,6 +1115,52 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1596229870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1596229872}
+  - component: {fileID: 1596229871}
+  m_Layer: 0
+  m_Name: Tiempo y control
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1596229871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596229870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 938e58c1210d24ac7841d262a3935c82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tiempo_y_UI
+  jugando: 0
+  tiempo_txt: {fileID: 491966845}
+--- !u!4 &1596229872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596229870}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.29677, y: -0.26083, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1378,7 +1425,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
-  - {fileID: 636388975}
   - {fileID: 719710986}
   - {fileID: 985100131}
   - {fileID: 1710477163}
+  - {fileID: 636388975}
+  - {fileID: 1596229872}
