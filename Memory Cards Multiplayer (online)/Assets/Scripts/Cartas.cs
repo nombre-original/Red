@@ -1,12 +1,12 @@
 using UnityEngine;
 
 public class Cartas : MonoBehaviour{
-    public GameObject PRUEBA;
-    public GameObject[] cartas;
+    public SpriteRenderer spriteRenderer;
+    public Sprite[] cartaTipo;
+    public GameObject carta;
     private int[] baraja = new int[7];
 
     private int numAleatorio;
-    private int numCartas;
 
     //Posición de las cartas
     private float x;
@@ -21,15 +21,15 @@ public class Cartas : MonoBehaviour{
         y = 2f;
         sepX = 5f;
         sepY = 4f;
-        numCartas = cartas.Length;
     }
 //NO, CREAR UNA BARSE PREESTABLECIDA Y DESORDENARLA
     void Update(){
         if (!cartasSobreLaMesa){
             for (int i=0; i<=7; i++){ //Primeras 4 cartas
-                numAleatorio = Random.Range(0,numCartas);//num aleatorio
-                Debug.Log(numAleatorio);
-                Instantiate(PRUEBA, new Vector2(x, y), Quaternion.identity/*para que ignore rotación*/);
+                numAleatorio = Random.Range(1,cartaTipo.Length-1);//num aleatorio
+                //Instantiate(cartas[numAleatorio], new Vector2(x, y), Quaternion.identity/*ignora apartado rotación*/);
+                Instantiate(carta, new Vector2(x, y), Quaternion.identity);
+                Debug.Log("detrás");
                 x += sepX;
                 if (x>8f){ //Últimas 4 cartas
                     y -= sepY;

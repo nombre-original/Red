@@ -928,13 +928,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d03b26532dcc449c87a3d6ed1660519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cartas
-  PRUEBA: {fileID: 6713156151082940588, guid: d39d35d8b8b33421a93a660d937fb480, type: 3}
-  cartas:
-  - {fileID: 6713156151082940588, guid: d39d35d8b8b33421a93a660d937fb480, type: 3}
-  - {fileID: 5551754849718018598, guid: 7dc6c9bc9eb7a4dab87609bed9e3a482, type: 3}
-  - {fileID: 1456988544028108532, guid: 15e0e25577a914eb09a24bac77d61357, type: 3}
-  - {fileID: 2473756155450710158, guid: f8f7042c29e254807b69f33bb8f8f814, type: 3}
-  - {fileID: 3963526690595679490, guid: b99e9149f6e2b4efa86b5708335a1c73, type: 3}
+  spriteRenderer: {fileID: 6188275905903603078, guid: 89d58ad23cca17649a61125bb91addec, type: 3}
+  cartaTipo:
+  - {fileID: 21300000, guid: ded0737c4744ec547a9ad22613165f3b, type: 3}
+  - {fileID: 21300000, guid: c9361d65e83126b45911b45ff0298762, type: 3}
+  - {fileID: 21300000, guid: 9a2336d30d6bd8243a53c8aa8fd06cd7, type: 3}
+  - {fileID: 21300000, guid: a17efe83410e4f6499fb5797916e2834, type: 3}
+  - {fileID: 21300000, guid: f27f6612da6fe104a9bc824463ca8fab, type: 3}
+  - {fileID: 21300000, guid: d207c68faef91214386404ab35e25f45, type: 3}
+  carta: {fileID: 8571930784212539034, guid: 89d58ad23cca17649a61125bb91addec, type: 3}
 --- !u!1 &719710982
 GameObject:
   m_ObjectHideFlags: 0
