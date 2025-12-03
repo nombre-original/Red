@@ -930,7 +930,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Cartas
   spriteRenderer: {fileID: 6188275905903603078, guid: 89d58ad23cca17649a61125bb91addec, type: 3}
   cartaTipo:
-  - {fileID: 21300000, guid: ded0737c4744ec547a9ad22613165f3b, type: 3}
   - {fileID: 21300000, guid: c9361d65e83126b45911b45ff0298762, type: 3}
   - {fileID: 21300000, guid: 9a2336d30d6bd8243a53c8aa8fd06cd7, type: 3}
   - {fileID: 21300000, guid: a17efe83410e4f6499fb5797916e2834, type: 3}
