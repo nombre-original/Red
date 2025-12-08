@@ -1,54 +1,46 @@
 using UnityEngine;
 using Unity.Netcode;
 
-public class PlayerController : NetworkBehaviour{
-    [SerializeField]
-    int velocidad = 5;
+public class SCR_Jugador : NetworkBehaviour{
+    [SerializeField] int velocidad = 5;
 
-    private SCR_Carta cartaTocada;//si funciona...he borrado demasiadas cosas ya, porfa funciona
+    private SCR_Carta cartaTocada;
 
     void Update(){
         if (!IsOwner) return;
 
-        //MOVIMIENTO
-        Vector3 direccion = new Vector3();
-        direccion.x = Input.GetAxis("Horizontal");
-        direccion.y = Input.GetAxis("Vertical");
-        direccion.Normalize();
-        transform.position = transform.position + direccion * velocidad * Time.deltaTime;
+        Vector3 dir = new Vector3(
+            Input.GetAxis("Horizontal"),
+            Input.GetAxis("Vertical"),
+            0f
+        ).normalized;
 
-        //ABRIR CARTAS
+        transform.position += dir * velocidad * Time.deltaTime;
+
         if (Input.GetKeyDown(KeyCode.Space) && cartaTocada != null){
-            VoltearServerRPC(cartaTocada.GetComponent<NetworkObject>().NetworkObjectId);
+            RequestFlipServerRpc(cartaTocada.GetComponent<NetworkObject>().NetworkObjectId);
         }
     }
 
-    //si sobre carta
     void OnTriggerEnter2D(Collider2D other){
         var carta = other.GetComponent<SCR_Carta>();
         if (carta != null){
             cartaTocada = carta;
         }
     }
-    //si no sobre carta
+
     void OnTriggerExit2D(Collider2D other){
         var carta = other.GetComponent<SCR_Carta>();
-        if (carta != null && carta == cartaTocada){
+        if (carta != null && carta == cartaTocada)
             cartaTocada = null;
-        }
     }
 
     [ServerRpc]
-    void VoltearServerRPC(ulong cartaNetworkId, ServerRpcParams rpcParams = default){
+    private void RequestFlipServerRpc(ulong cartaNetworkId){
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(cartaNetworkId, out var netObj)){
             var carta = netObj.GetComponent<SCR_Carta>();
             if (carta != null){
-                var clientParams = new ClientRpcParams{
-                    Send = new ClientRpcSendParams{
-                        TargetClientIds = new ulong[]{rpcParams.Receive.SenderClientId}
-                    }
-                };
-                carta.GirarParaClienteDesdeServidor(carta.EnviarId(), clientParams);
+                carta.SetBocaArribaServer(!carta.EstaBocaArriba());
             }
         }
     }

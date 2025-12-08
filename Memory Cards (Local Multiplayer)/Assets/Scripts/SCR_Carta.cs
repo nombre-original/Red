@@ -1,67 +1,74 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Unity.Netcode;
 
 public class SCR_Carta : NetworkBehaviour{
     private SpriteRenderer sr;
     public Sprite reverso;
-    private NetworkVariable<int> tipoId = new NetworkVariable<int>(-1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    
+
+    private NetworkVariable<int> tipoId = new NetworkVariable<int>(
+        -1,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
+
+    private NetworkVariable<bool> bocaArriba = new NetworkVariable<bool>(
+        false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
+
     void Awake(){
         sr = GetComponent<SpriteRenderer>();
         sr.sprite = reverso;
     }
+
+    public override void OnNetworkSpawn(){
+        if (IsClient){
+            tipoId.OnValueChanged += (_, __) => ActualizarSprite();
+            bocaArriba.OnValueChanged += (_, __) => ActualizarSprite();
+            ActualizarSprite();
+        }
+    }
+
+    private void ActualizarSprite(){
+        if (sr == null) return;
+        if (tipoId.Value < 0 || !bocaArriba.Value){
+            sr.sprite = reverso;
+            return;
+        }
+        var juego = Object.FindFirstObjectByType<SCR_Juego>();
+        if (juego == null || juego.tipos == null) { sr.sprite = reverso; return; }
+        int id = tipoId.Value;
+        if (id >= 0 && id < juego.tipos.Length) sr.sprite = juego.tipos[id];
+        else sr.sprite = reverso;
+    }
+
 
     public void MarcarId(int id){
         if (!IsServer) return;
         tipoId.Value = id;
     }
 
-    [ServerRpc]
-    public void PedirGirarServerRpc(ulong requesterClientId, ServerRpcParams rpcParams = default){
-        var clientParams = new ClientRpcParams{
-            Send = new ClientRpcSendParams{
-                TargetClientIds = new ulong[] {requesterClientId}
-            }
-        };
-
-        GirarClientRpc(tipoId.Value, clientParams);
-        
-        if(IsServer){
-            var juego = Object.FindFirstObjectByType<SCR_Juego>();
-            juego.CartaElegidaServer(requesterClientId, GetComponent<NetworkObject>().NetworkObjectId, tipoId.Value);
-        }
-    }
-
-    [ClientRpc]
-    private void GirarClientRpc(int tipoIndex, ClientRpcParams clientRpcParams = default){
-        var juego = Object.FindFirstObjectByType<SCR_Juego>();
-        if (juego == null){
-            return;
-        }
-        var tipos = juego.tipos;
-        if (tipos == null || tipos.Length == 0){
-            return;
-        }
-        if (tipoIndex >= 0 && tipoIndex < tipos.Length){
-            sr.sprite = tipos[tipoIndex];
-        }
+    public void SetBocaArribaServer(bool valor){
+        if (!IsServer) return;
+        bocaArriba.Value = valor;
     }
 
     [ServerRpc]
-    public void EmparejadaServerRpc(ServerRpcParams rpcParams = default){
-        var obj = GetComponent<NetworkObject>();
-        if (obj != null && obj.IsSpawned){
-            obj.Despawn(true);
-        }else{
+    public void FlipCartaServerRpc(bool valor, ServerRpcParams rpcParams = default){
+        bocaArriba.Value = valor;
+    }
+
+    [ServerRpc]
+    public void EmparejadaServerRpc(){
+        var netObj = GetComponent<NetworkObject>();
+
+        if (netObj != null && netObj.IsSpawned)
+            netObj.Despawn(true);
+        else
             Destroy(gameObject);
-        }
     }
 
-    public int EnviarId(){
-        return tipoId.Value;
-    }
-
-    public void GirarParaClienteDesdeServidor(int tipoIndex, ClientRpcParams clientRpcParams){
-        GirarClientRpc(tipoIndex, clientRpcParams);
-    }
+    public int EnviarId() => tipoId.Value;
+    public bool EstaBocaArriba() => bocaArriba.Value;
 }
