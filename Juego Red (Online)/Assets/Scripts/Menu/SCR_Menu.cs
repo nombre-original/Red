@@ -44,7 +44,7 @@ public class SCR_Menu : MonoBehaviour {
         miTransport.SetRelayServerData(new RelayServerData(servidorDeRelay, "udp"));
 
         // 4.3 cambiar la configuración del UnityTransport por los del Relay
-        miTransport.SetRelayServerData(datosDelRelay);
+        //miTransport.SetRelayServerData(datosDelRelay);
 
         // 5. iniciar el server
         NetworkManager.Singleton.StartHost();
@@ -66,7 +66,7 @@ public class SCR_Menu : MonoBehaviour {
         JoinAllocation serverDeUnity = await RelayService.Instance.JoinAllocationAsync(codigoPartida);
 
         // 2 - configurar nuestro NetworkManager (UnityTransport)
-        NetworkManager.Singleton.GetComponent().SetRelayServerData( new RelayServerData(serverDeUnity, "udp") );
+        //NetworkManager.Singleton.GetComponent().SetRelayServerData( new RelayServerData(serverDeUnity, "udp") );
 
         // 3 - Iniciar como Client
         NetworkManager.Singleton.StartClient();
