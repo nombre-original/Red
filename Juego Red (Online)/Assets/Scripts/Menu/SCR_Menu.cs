@@ -1,29 +1,92 @@
+using System;
+using System.Threading.Tasks;
+using TMPro;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class SCR_Menu : MonoBehaviour{
+public class SCR_Menu : MonoBehaviour {
     public GameObject CanvasMenu;
-    public GameObject CanvasAvatar;
-    
-    public void ConectarHost(){
-        CanvasMenu.SetActive(false);
-        CanvasAvatar.SetActive(true);
-    }
+    public GameObject Juego;
+    public GameObject codigoCliente;
 
-    public void ConectarCliente(){
+    public TextMeshProUGUI lblCode;
+    public TMP_InputField inputCode;
 
-    }
+    private bool servicesReady = false;
 
-    public void Desconectar(){
+    async void Start() {
+        // 1 - Iniciar los servicio de cloud
+        await UnityServices.InitializeAsync();
 
-    }
+        // 2 - iniciar sesión de usuario (anonimo)
+        await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-    public void Volver(){
-        CanvasAvatar.SetActive(false);
         CanvasMenu.SetActive(true);
+        codigoCliente.SetActive(false);
+        Juego.SetActive(false);
     }
 
-    public void ElegirAvatar(){
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+    public async void ConectarHost() {
+        Allocation servidorDeRelay = await RelayService.Instance.CreateAllocationAsync(12);
+
+        // 4 - Configurar nuestro NetworkManager para usar el servidor de relay
+        // 4.1 buscar el componente UnityTransport
+        UnityTransport miTransport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+
+        // 4.2 generar los datosDelRelay (a partir de los datos del server)
+        miTransport.SetRelayServerData(new RelayServerData(servidorDeRelay, "udp"));
+
+        // 4.3 cambiar la configuración del UnityTransport por los del Relay
+        miTransport.SetRelayServerData(datosDelRelay);
+
+        // 5. iniciar el server
+        NetworkManager.Singleton.StartHost();
+
+        // 6. MOSTRAR EL CODIGO DE PARTIDA
+        lblCode.text = await RelayService.Instance.GetJoinCodeAsync(servidorDeRelay.AllocationId);
+
+        CanvasMenu.SetActive(false);
+        codigoCliente.SetActive(false);
+        Juego.SetActive(true);
+    }
+
+
+    // Método asignado al botón Cliente (puede ser async void)
+    public async void ConectarCliente() {
+        // 1 - obtener el serverRelay a partir del código de partida
+        string codigoPartida = inputCode.text;
+
+        JoinAllocation serverDeUnity = await RelayService.Instance.JoinAllocationAsync(codigoPartida);
+
+        // 2 - configurar nuestro NetworkManager (UnityTransport)
+        NetworkManager.Singleton.GetComponent().SetRelayServerData( new RelayServerData(serverDeUnity, "udp") );
+
+        // 3 - Iniciar como Client
+        NetworkManager.Singleton.StartClient();
+
+            Juego.SetActive(true);
+            codigoCliente.SetActive(false);
+            CanvasMenu.SetActive(true);
+            codigoCliente.SetActive(false);
+    }
+
+    public void Desconectar() {
+        NetworkManager.Singleton.Shutdown();
+        CanvasMenu.SetActive(true);
+        codigoCliente.SetActive(false);
+        Juego.SetActive(false);
+    }
+
+    public void Volver() {
+        CanvasMenu.SetActive(true);
+        codigoCliente.SetActive(false);
+        Juego.SetActive(false);
     }
 }
