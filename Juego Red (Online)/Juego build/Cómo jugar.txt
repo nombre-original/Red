@@ -1,0 +1,5 @@
+Objetivo: recoger todos los pingüinos posibles y obtener la puntuación más alta.
+Pingüino(blanco y negro): +1 punto
+Nongüino(rojo): -2 puntos
+Golduino(dorado): +5 puntos
+El personaje se mueve con las flechas del teclado
